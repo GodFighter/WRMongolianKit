@@ -19,13 +19,24 @@
 {
     [super viewDidLoad];
 
-    self.view.backgroundColor = [UIColor redColor];
+    [self initTextView];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)initTextView
+{
+    WRVerticalTextView *textView = [[WRVerticalTextView alloc] initWithFrame:CGRectMake(50, 300, 200, 100)];
+    [self.view addSubview:textView];
+    
+    [textView becomeFirstResponder];
+    
+    textView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+    textView.caretColor = [UIColor blackColor];
 }
 
 @end
