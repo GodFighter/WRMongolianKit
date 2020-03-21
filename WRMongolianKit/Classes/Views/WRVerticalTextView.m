@@ -112,6 +112,17 @@
 }
 
 //MARK:-  Get & Set
+- (void)setText:(NSString *)text {
+    if (text.length == 0) {
+        return;
+    }
+    NSRange selectedNSRange = self.contentView.selectedTextRange;
+    NSRange markedTextRange = self.contentView.markedTextRange;
+    [_innerText insertString:text atIndex:selectedNSRange.location];
+    markedTextRange.location = selectedNSRange.location;
+    markedTextRange.length = _innerText.length;
+    [self _setContentText];
+}
 - (void)setFont:(UIFont *)font
 {
     if (font == nil || _font == font) { return; }
@@ -433,7 +444,7 @@
 //必备方法，返回文本样式信息
 - (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
 {
-    return @{ NSFontAttributeName : [UIFont systemFontOfSize:20] };
+    return @{ NSFontAttributeName : [UIFont systemFontOfSize:18] };
 }
 
 //MARK:- UIGestureRecognizerDelegate

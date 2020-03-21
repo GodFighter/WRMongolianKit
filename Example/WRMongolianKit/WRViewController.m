@@ -7,7 +7,7 @@
 //
 
 #import "WRViewController.h"
-#import <WRMongolianKit.h>
+#import <WRMongolianKit/WRMongolianKit-umbrella.h>
 
 @interface WRViewController ()
 
@@ -31,6 +31,9 @@
 - (void)initTextView
 {
     WRVerticalTextView *textView = [[WRVerticalTextView alloc] initWithFrame:CGRectMake(50, 300, 200, 100)];
+    //    attr[NSFontAttributeName] = [UIFont fontWithName:@"DelehiSoninQaganTig" size:19];
+    textView.font = [UIFont fontWithName:@"DelehiSoninQaganTig" size:19];
+    textView.text = @"ᠪᠠᠭᠤᠯᠭᠠᠬᠤ ᠲᠤᠰᠭᠠᠢ good  ᠪᠠᠭᠤᠯᠭᠠᠬᠤ ᠲᠤᠰᠭᠠᠢ ᠪᠠᠭᠤᠯᠭᠠᠬᠤ";
     [self.view addSubview:textView];
     
     [textView becomeFirstResponder];
