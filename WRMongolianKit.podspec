@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WRMongolianKit'
-  s.version          = '0.9.0'
+  s.version          = '0.9.2'
   s.summary          = '竖向蒙文标签控件'
 
 # This description is used to generate tags and improve search results.
@@ -24,28 +24,25 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'GodFighter' => '{xianghui_ios@163.com}' }
   s.source           = { :git => 'https://github.com/GodFighter/WRMongolianKit.git', :tag => s.version.to_s }
+  s.frameworks = 'UIKit', 'Foundation'
+  s.requires_arc = true
 
   s.ios.deployment_target = '9.0'
 
-  s.public_header_files = 'WRMongolianKit/WRMongolianKit.h'
-  s.source_files = 'AFNetworking/AFNetworking.h'
-
   s.subspec 'CoreText' do |ss|
-    ss.source_files = 'WRMongolianKit/Classes/CoreText/*.{h,m}'
+    ss.source_files = 'WRMongolianKit/Classes/CoreText/**/*'
   end
 
   s.subspec 'Input' do |ss|
-    ss.source_files = 'WRMongolianKit/Classes/Input/*.{h,m}'
+    ss.source_files = 'WRMongolianKit/Classes/Input/**/*'
   end
 
   s.subspec 'Views' do |ss|
-    ss.source_files = 'WRMongolianKit/Classes/Views/*.{h,m}'
-    ss.public_header_files = 'WRMongolianKit/Classes/Views/*.h'
+    ss.source_files = 'WRMongolianKit/Classes/Views/**/*'
+  end
 
   s.subspec 'Controllers' do |ss|
-    ss.source_files = 'WRMongolianKit/Classes/Controllers/*.{h,m}'
-    ss.public_header_files = 'WRMongolianKit/Classes/Controllers/*.h'
-
+    ss.source_files = 'WRMongolianKit/Classes/Controllers/**/*'
   end
 
 
