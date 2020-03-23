@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WRAlignment.h"
+#import <WRAlignment.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

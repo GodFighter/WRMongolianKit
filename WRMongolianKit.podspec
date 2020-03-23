@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WRMongolianKit'
-  s.version          = '0.9.3'
+  s.version          = '0.9.4'
   s.summary          = '竖向蒙文标签控件'
 
 # This description is used to generate tags and improve search results.
@@ -28,6 +28,9 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.ios.deployment_target = '9.0'
+
+  s.public_header_files = 'WRMongolianKit/Classes/WRMongolianKit.h'
+  s.source_files = 'WRMongolianKit/Classes/WRMongolianKit.h'
 
   s.subspec 'Aliment' do |ss|
     ss.source_files = 'WRMongolianKit/Classes/Aliment/WRAlignment.h'

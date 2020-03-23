@@ -7,7 +7,7 @@
 //
 
 #import "WRViewController.h"
-#import <WRVerticalTextView.h>
+#import <WRMongolianKit.h>
 
 @interface WRViewController ()
 
