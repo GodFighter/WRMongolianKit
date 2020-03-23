@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class WRTextLayout;
 @interface WRVerticalContentView : UIView
 
 @property (weak, nonatomic) WRTextCaretView *caretView;
@@ -20,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSRange selectedTextRange; // Selected text range.
 
 @property(nonatomic, strong) UIFont *font;
+
+@property (nonatomic, strong) WRTextLayout *textLayout;
 
 - (NSInteger)closestIndexToPoint:(CGPoint)point;
 

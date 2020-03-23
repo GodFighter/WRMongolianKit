@@ -14,8 +14,6 @@
 {
 }
 
-@property (nonatomic, strong) WRTextLayout *textLayout;
-
 @end
 
 
@@ -42,14 +40,6 @@
     return self;
 }
 
-- (void)drawRect:(CGRect)rect
-{
-//    [self drawRangeAsSelection:_selectedTextRange];
-//CTFrameDraw(_ctFrame, UIGraphicsGetCurrentContext());
-
-    [self.textLayout drawInContext:UIGraphicsGetCurrentContext() size:self.bounds.size];
-}
-
 NSRange RangeIntersection(NSRange first, NSRange second)
 {
     NSRange result = NSMakeRange(NSNotFound, 0);
@@ -70,6 +60,61 @@ NSRange RangeIntersection(NSRange first, NSRange second)
 
     return result;
 }
+
+- (void)test {
+    if (self.markedTextRange.length == 0 || self.markedTextRange.location == NSNotFound) {
+        return;
+    }
+    
+    [[UIColor redColor] setFill];
+
+     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.contentText);
+     UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.bounds];
+     
+     NSDictionary* frameAttrs = nil;
+     frameAttrs = @{(NSString *)kCTFrameProgressionAttributeName:@(kCTFrameProgressionLeftToRight)};
+
+    CTFrameRef ctFrame =  CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), [path CGPath], (CFTypeRef)frameAttrs);
+
+    CFArrayRef lines = CTFrameGetLines(ctFrame);
+    CFIndex linesCount = CFArrayGetCount(lines);
+    CGPoint origins[linesCount];
+    CTFrameGetLineOrigins(ctFrame, CFRangeMake(0, linesCount), origins);
+    
+    for (int i = 0; i < linesCount; i++)
+    {
+        CTLineRef line = (CTLineRef) CFArrayGetValueAtIndex(lines, i);
+        CFRange lineRange = CTLineGetStringRange(line);
+        NSRange range = NSMakeRange(lineRange.location, lineRange.length);
+
+        NSRange intersection = RangeIntersection(range, self.markedTextRange);
+
+        CGPoint origin = origins[i];
+        CGFloat ascent, descent;
+        CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+        CGFloat xStart = CTLineGetOffsetForStringIndex(line, intersection.location, NULL);
+        CGFloat xEnd = CTLineGetOffsetForStringIndex(line, intersection.location + intersection.length, NULL);
+        CGRect selectionRect = CGRectMake(origin.x - descent, xStart, ascent + descent, xEnd - xStart);
+        UIRectFill(selectionRect);
+    }
+    
+    CFRelease(framesetter);
+    CFRelease(ctFrame);
+}
+
+- (void)drawRect:(CGRect)rect
+{
+//    [self drawRangeAsSelection:_selectedTextRange];
+//CTFrameDraw(_ctFrame, UIGraphicsGetCurrentContext());
+
+    [self test];
+    
+    [self.textLayout drawInContext:UIGraphicsGetCurrentContext() size:self.bounds.size];
+    
+    
+
+}
+
 
 //- (void)drawRangeAsSelection:(NSRange)selectionRange
 //{
@@ -166,6 +211,7 @@ NSRange RangeIntersection(NSRange first, NSRange second)
     {
         self.caretView.frame = [self caretRectForIndex:(int)self.selectedTextRange.location];
     }
+    
 }
 
 - (CGRect)caretRectForIndex:(int)index
@@ -204,10 +250,10 @@ NSRange RangeIntersection(NSRange first, NSRange second)
         // Place point after last line, including any font leading spacing if applicable.
         origin.y -= self.font.leading;
 
-        CFRelease(framesetter);
-        framesetter = NULL;
-        CFRelease(ctFrame);
-        ctFrame = NULL;
+//        CFRelease(framesetter);
+//        framesetter = NULL;
+//        CFRelease(ctFrame);
+//        ctFrame = NULL;
 
         return CGRectMake(origin.x - fabs(descent), xPos, ascent + descent, 2);
     }
@@ -225,10 +271,10 @@ NSRange RangeIntersection(NSRange first, NSRange second)
             CGFloat offset = CTLineGetOffsetForStringIndex(line, index, NULL);
             CTFrameGetLineOrigins(ctFrame, CFRangeMake(linesIndex, 0), &origin);
 
-            CFRelease(framesetter);
-            framesetter = NULL;
-            CFRelease(ctFrame);
-            ctFrame = NULL;
+//            CFRelease(framesetter);
+//            framesetter = NULL;
+//            CFRelease(ctFrame);
+//            ctFrame = NULL;
 
             // Make a small "caret" rect at the index position.
             return CGRectMake(origin.x - descent, offset, ascent + descent, 2);

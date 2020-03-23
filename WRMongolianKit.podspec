@@ -30,8 +30,23 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'WRMongolianKit/Classes/**/*'
-  
+  s.public_header_files = 'WRMongolianKit/WRMongolianKit.h'
+  s.source_files = 'AFNetworking/AFNetworking.h'
+
+  s.subspec 'CoreText' do |ss|
+    ss.source_files = 'WRMongolianKit/Classes/CoreText/*.{h,m}'
+  end
+
+  s.subspec 'Input' do |ss|
+    ss.source_files = 'WRMongolianKit/Classes/Input.{h,m}'
+  end
+
+  s.subspec 'Views' do |ss|
+    ss.source_files = 'WRMongolianKit/Classes/Views.{h,m}'
+  ss.public_header_files = 'WRMongolianKit/Classes/Views/*.{h,m}'
+  end
+
+
   # s.resource_bundles = {
   #   'WRMongolianKit' => ['WRMongolianKit/Assets/*.png']
   # }

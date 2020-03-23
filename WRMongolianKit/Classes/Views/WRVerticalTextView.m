@@ -9,6 +9,7 @@
 
 #import "WRTextPosition.h"
 #import "WRTextRange.h"
+#import "WRTextLayout.h"
 
 #import "WRVerticalContentView.h"
 
@@ -82,9 +83,10 @@
 
 - (void)_initContentViews
 {
+//    WRVerticalContentView *contentView = [[WRVerticalContentView alloc] initWithFrame:UIEdgeInsetsInsetRect(self.bounds, self.insets)];
     WRVerticalContentView *contentView = [[WRVerticalContentView alloc] initWithFrame:UIEdgeInsetsInsetRect(self.bounds, self.insets)];
     contentView.backgroundColor = self.backgroundColor == nil ? [UIColor whiteColor] : self.backgroundColor;
-    contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     contentView.font = _font;
     [self addSubview:contentView];
     self.contentView = contentView;
@@ -108,7 +110,13 @@
     };
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:_innerText attributes:attributes];
+        
+    self.contentView.frame = CGRectMake(self.insets.left, self.insets.top, 100000, self.bounds.size.height - self.insets.top - self.insets.bottom);
     self.contentView.contentText = attributedString;
+    self.contentView.frame = CGRectMake(self.insets.left, self.insets.top, self.contentView.textLayout.textBoundingSize.width + 5, self.bounds.size.height - self.insets.top - self.insets.bottom);
+    
+    self.contentSize = self.contentView.bounds.size;
+    [self scrollRectToVisible:CGRectInset(self.bounds, self.bounds.size.width - self.contentSize.width, 0) animated:YES];
 }
 
 //MARK:-  Get & Set
