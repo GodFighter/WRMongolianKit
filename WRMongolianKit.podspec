@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WRMongolianKit'
-  s.version          = '0.9.2'
+  s.version          = '0.9.3'
   s.summary          = '竖向蒙文标签控件'
 
 # This description is used to generate tags and improve search results.
@@ -29,20 +29,32 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '9.0'
 
+  s.subspec 'Aliment' do |ss|
+    ss.source_files = 'WRMongolianKit/Classes/Aliment/WRAlignment.h'
+  end
+
   s.subspec 'CoreText' do |ss|
-    ss.source_files = 'WRMongolianKit/Classes/CoreText/**/*'
+    ss.source_files = 'WRMongolianKit/Classes/CoreText/*.{h,m}'
+    ss.dependency 'WRMongolianKit/Aliment'
+    ss.dependency 'WRMongolianKit/Input'
   end
 
   s.subspec 'Input' do |ss|
-    ss.source_files = 'WRMongolianKit/Classes/Input/**/*'
+    ss.source_files = 'WRMongolianKit/Classes/Input/*.{h,m}'
+  ss.dependency 'WRMongolianKit/Aliment'
   end
 
   s.subspec 'Views' do |ss|
-    ss.source_files = 'WRMongolianKit/Classes/Views/**/*'
+    ss.source_files = 'WRMongolianKit/Classes/Views/*.{h,m}'
+    ss.dependency 'WRMongolianKit/Aliment'
+    ss.dependency 'WRMongolianKit/CoreText'
+    ss.dependency 'WRMongolianKit/Input'
   end
 
   s.subspec 'Controllers' do |ss|
-    ss.source_files = 'WRMongolianKit/Classes/Controllers/**/*'
+    ss.source_files = 'WRMongolianKit/Classes/Controllers/*.{h,m}'
+    ss.dependency 'WRMongolianKit/Aliment'
+    ss.dependency 'WRMongolianKit/Views'
   end
 
 
