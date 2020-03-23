@@ -225,21 +225,14 @@ NSRange RangeIntersection(NSRange first, NSRange second)
     if (index == self.contentText.length && [self.contentText.string characterAtIndex:(index - 1)] == '\n')
     {
         CTLineRef line = (CTLineRef)CFArrayGetValueAtIndex(lines, linesCount -1);
-        CFRange range = CTLineGetStringRange(line);
         CGPoint origin;
         CGFloat ascent, descent;
         CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-        CGFloat offset = CTLineGetOffsetForStringIndex(line, range.location + range.length, NULL);
         CTFrameGetLineOrigins(ctFrame, CFRangeMake(linesCount - 1, 0), &origin);
         // Place point after last line, including any font leading spacing if applicable.
         origin.y -= self.font.leading;
 
-//        CFRelease(framesetter);
-//        framesetter = NULL;
-//        CFRelease(ctFrame);
-//        ctFrame = NULL;
-
-        return CGRectMake(origin.x - fabs(descent), offset, ascent + descent, 2);
+        return CGRectMake(origin.x - fabs(descent) + ascent + descent, 0, ascent + descent, 2);
     }
     
     // 光标在文本的任意位置
@@ -255,12 +248,6 @@ NSRange RangeIntersection(NSRange first, NSRange second)
             CGFloat offset = CTLineGetOffsetForStringIndex(line, index, NULL);
             CTFrameGetLineOrigins(ctFrame, CFRangeMake(linesIndex, 0), &origin);
 
-//            CFRelease(framesetter);
-//            framesetter = NULL;
-//            CFRelease(ctFrame);
-//            ctFrame = NULL;
-
-            // Make a small "caret" rect at the index position.
             return CGRectMake(origin.x - descent, offset, ascent + descent, 2);
         }
     }

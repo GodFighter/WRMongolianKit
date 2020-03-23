@@ -7,7 +7,7 @@
 //
 
 #import "WRViewController.h"
-#import <WRMongolianKit/WRMongolianKit.h>
+#import <WRMongolianKit.h>
 
 @interface WRViewController ()
 

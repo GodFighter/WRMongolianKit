@@ -257,6 +257,9 @@
 
 - (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
 {
+    if (markedText.length == 0) {
+        return;
+    }
     NSRange selectedNSRange = self.contentView.selectedTextRange;
     NSRange markedTextRange = self.contentView.markedTextRange;
 

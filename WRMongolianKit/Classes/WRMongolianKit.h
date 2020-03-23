@@ -8,7 +8,10 @@
 #ifndef WRMongolianKit_h
 #define WRMongolianKit_h
 
+#import "WRAlignment.h"
 #import "WRVerticalTextView.h"
+#import "WRVerticalLabel.h"
+#import "WRVerticalButton.h"
 
 
 #endif /* WRMongolianKit_h */
