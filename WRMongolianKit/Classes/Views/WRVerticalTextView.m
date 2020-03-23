@@ -98,7 +98,7 @@
 
 - (void)_setContentText
 {
-    if (_innerText.length <= 0 || self.font == nil || self.textColor == nil) { return; }
+    if (_innerText == nil || self.font == nil || self.textColor == nil) { return; }
     
     NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
     paragraphStyle.lineSpacing = 5;
@@ -188,12 +188,31 @@
 
 - (void)deleteBackward
 {
+    NSRange selectedNSRange = self.contentView.selectedTextRange;
+    NSRange markedTextRange = self.contentView.markedTextRange;
 
+    if (selectedNSRange.length > 0) {
+        [_innerText replaceCharactersInRange:selectedNSRange withString:@""];
+        selectedNSRange.length = 0;
+    }
+    
+    markedTextRange = NSMakeRange(NSNotFound, 0);
+    
+    [self _setContentText];
+    self.contentView.markedTextRange = markedTextRange;
+    self.contentView.selectedTextRange = selectedNSRange;
 }
 
 - (void)insertText:(nonnull NSString *)text
 {
-    
+    NSRange selectedNSRange = self.contentView.selectedTextRange;
+
+    [_innerText insertString:text atIndex:selectedNSRange.location];
+    selectedNSRange.location += text.length;
+
+    [self _setContentText];
+    self.contentView.selectedTextRange = selectedNSRange;
+
 }
 
 //MARK:- UITextInput func
@@ -215,7 +234,6 @@
     } else {
         // 相交，待处理
         //TODO: 待处理选中替换的范围问题
-
     }
 
     // Now replace characters in text storage
@@ -317,9 +335,11 @@
         case UITextLayoutDirectionLeft:
             newPosition -= offset;
             break;
-        UITextLayoutDirectionUp:
-        UITextLayoutDirectionDown:
-            //TODO: 竖向的支持
+        case UITextLayoutDirectionUp:
+            newPosition -= offset;
+            break;
+        case UITextLayoutDirectionDown:
+            newPosition += offset;
             break;
     }
 

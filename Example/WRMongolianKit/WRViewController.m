@@ -39,7 +39,7 @@
     [textView becomeFirstResponder];
     
     textView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
-    textView.caretColor = [UIColor blackColor];
+//    textView.caretColor = [UIColor blackColor];
 }
 
 @end

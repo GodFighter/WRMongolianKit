@@ -12,22 +12,24 @@
 
 @interface WRVerticalContentView()
 {
+    CTFramesetterRef _framesetter; // Cached Core Text framesetter.
+    CTFrameRef _ctFrame; // Cached Core Text frame.
 }
 
 @end
-
 
 @implementation WRVerticalContentView
 
 //MARK:- Life
 - (void)dealloc
 {
-
+    [self reset];
 }
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.userInteractionEnabled = NO;
-//        self.layer.geometryFlipped = YES;  // For ease of interaction with the CoreText coordinate system.
+        
+        self.selectedColor = [UIColor colorWithWhite:0.7 alpha:1];
     }
     return self;
 }
@@ -35,7 +37,8 @@
 - (instancetype)initWithCoder:(NSCoder *)coder {
     if (self = [super initWithCoder:coder]) {
         self.userInteractionEnabled = NO;
-//        self.layer.geometryFlipped = YES;  // For ease of interaction with the CoreText coordinate system.
+        
+        self.selectedColor = [UIColor colorWithWhite:0.7 alpha:1];
     }
     return self;
 }
@@ -61,25 +64,18 @@ NSRange RangeIntersection(NSRange first, NSRange second)
     return result;
 }
 
-- (void)test {
-    if (self.markedTextRange.length == 0 || self.markedTextRange.location == NSNotFound) {
+- (void)drawRangeAsSelection:(NSRange)selectionRange
+{
+    if (selectionRange.length == 0 || selectionRange.location == NSNotFound) {
         return;
     }
     
-    [[UIColor redColor] setFill];
+    [self.selectedColor setFill];
 
-     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.contentText);
-     UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.bounds];
-     
-     NSDictionary* frameAttrs = nil;
-     frameAttrs = @{(NSString *)kCTFrameProgressionAttributeName:@(kCTFrameProgressionLeftToRight)};
-
-    CTFrameRef ctFrame =  CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), [path CGPath], (CFTypeRef)frameAttrs);
-
-    CFArrayRef lines = CTFrameGetLines(ctFrame);
+    CFArrayRef lines = CTFrameGetLines(_ctFrame);
     CFIndex linesCount = CFArrayGetCount(lines);
     CGPoint origins[linesCount];
-    CTFrameGetLineOrigins(ctFrame, CFRangeMake(0, linesCount), origins);
+    CTFrameGetLineOrigins(_ctFrame, CFRangeMake(0, linesCount), origins);
     
     for (int i = 0; i < linesCount; i++)
     {
@@ -87,7 +83,7 @@ NSRange RangeIntersection(NSRange first, NSRange second)
         CFRange lineRange = CTLineGetStringRange(line);
         NSRange range = NSMakeRange(lineRange.location, lineRange.length);
 
-        NSRange intersection = RangeIntersection(range, self.markedTextRange);
+        NSRange intersection = RangeIntersection(range, selectionRange);
 
         CGPoint origin = origins[i];
         CGFloat ascent, descent;
@@ -97,67 +93,16 @@ NSRange RangeIntersection(NSRange first, NSRange second)
         CGRect selectionRect = CGRectMake(origin.x - descent, xStart, ascent + descent, xEnd - xStart);
         UIRectFill(selectionRect);
     }
-    
-    CFRelease(framesetter);
-    CFRelease(ctFrame);
 }
 
 - (void)drawRect:(CGRect)rect
 {
-//    [self drawRangeAsSelection:_selectedTextRange];
-//CTFrameDraw(_ctFrame, UIGraphicsGetCurrentContext());
 
-    [self test];
+    [self drawRangeAsSelection:self.selectedTextRange];
+    [self drawRangeAsSelection:self.markedTextRange];
     
     [self.textLayout drawInContext:UIGraphicsGetCurrentContext() size:self.bounds.size];
-    
-    
-
 }
-
-
-//- (void)drawRangeAsSelection:(NSRange)selectionRange
-//{
-//    // If not in editing mode, do not draw selection rectangles.
-//    if (!self.editing) {
-//        return;
-//    }
-//
-//    // If the selection range is empty, do not draw.
-//    if (selectionRange.length == 0 || selectionRange.location == NSNotFound) {
-//        return;
-//    }
-//
-//    // Set the fill color to the selection color.
-//    [[UIColor redColor] setFill];
-//
-//    /*
-//     Iterate over the lines in our CTFrame, looking for lines that intersect with the given selection range, and draw a selection rect for each intersection.
-//     */
-//    CFArrayRef lines = CTFrameGetLines(_ctFrame);
-//    CFIndex linesCount = CFArrayGetCount(lines);
-//
-//    for (CFIndex linesIndex = 0; linesIndex < linesCount; linesIndex++) {
-//
-//        CTLineRef line = (CTLineRef) CFArrayGetValueAtIndex(lines, linesIndex);
-//        CFRange lineRange = CTLineGetStringRange(line);
-//        NSRange range = NSMakeRange(lineRange.location, lineRange.length);
-//        NSRange intersection = RangeIntersection(range, selectionRange);
-//        if (intersection.location != NSNotFound && intersection.length > 0) {
-//            // The text range for this line intersects our selection range.
-//            CGFloat xStart = CTLineGetOffsetForStringIndex(line, intersection.location, NULL);
-//            CGFloat xEnd = CTLineGetOffsetForStringIndex(line, intersection.location + intersection.length, NULL);
-//            CGPoint origin;
-//            // Get coordinate and bounds information for the intersection text range.
-//            CTFrameGetLineOrigins(_ctFrame, CFRangeMake(linesIndex, 0), &origin);
-//            CGFloat ascent, descent;
-//            CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-//            // Create a rect for the intersection and draw it with selection color.
-//            CGRect selectionRect = CGRectMake(xStart, origin.y - descent, xEnd - xStart, ascent + descent);
-//            UIRectFill(selectionRect);
-//        }
-//    }
-//}
 
 //MARK:- Set & Get
 - (void)setFrame:(CGRect)frame
@@ -165,6 +110,8 @@ NSRange RangeIntersection(NSRange first, NSRange second)
     [super setFrame:frame];
     
     self.textLayout.containerSize = frame.size;
+
+    [self updateCTFrame];
 
     [self setNeedsDisplay];
 }
@@ -174,6 +121,8 @@ NSRange RangeIntersection(NSRange first, NSRange second)
     [super setBounds:bounds];
     self.textLayout.containerSize = bounds.size;
 
+    [self updateCTFrame];
+
     [self setNeedsDisplay];
 }
 
@@ -181,8 +130,16 @@ NSRange RangeIntersection(NSRange first, NSRange second)
 {
     if (contentText == nil || contentText == _contentText) { return; }
     
+    [self reset];
+    
     _contentText = contentText;
     self.textLayout.text = _contentText;
+
+    if (_framesetter != NULL) {
+        CFRelease(_framesetter);
+    }
+    _framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)_contentText);
+    [self updateCTFrame];
 
     [self setNeedsDisplay];
 }
@@ -200,6 +157,32 @@ NSRange RangeIntersection(NSRange first, NSRange second)
 }
 
 //MARK:- Private
+- (void)reset
+{
+    if (_framesetter != NULL) {
+        CFRelease(_framesetter);
+        _framesetter = NULL;
+    }
+
+    if (_ctFrame != NULL) {
+        CFRelease(_ctFrame);
+        _ctFrame = NULL;
+    }
+}
+
+- (void)updateCTFrame
+{
+    // Create the Core Text frame using our current view rect bounds.
+    UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.bounds];
+
+    if (_ctFrame != NULL) {
+        CFRelease(_ctFrame);
+    }
+    
+    NSDictionary* frameAttrs = @{(NSString *)kCTFrameProgressionAttributeName:@(kCTFrameProgressionLeftToRight)};;
+    _ctFrame =  CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, 0), [path CGPath], (CFTypeRef)frameAttrs);
+}
+
 - (void)selectionChanged
 {
     if (!self.editing)
@@ -212,6 +195,7 @@ NSRange RangeIntersection(NSRange first, NSRange second)
         self.caretView.frame = [self caretRectForIndex:(int)self.selectedTextRange.location];
     }
     
+    [self setNeedsDisplay];
 }
 
 - (CGRect)caretRectForIndex:(int)index
@@ -242,10 +226,10 @@ NSRange RangeIntersection(NSRange first, NSRange second)
     {
         CTLineRef line = (CTLineRef)CFArrayGetValueAtIndex(lines, linesCount -1);
         CFRange range = CTLineGetStringRange(line);
-        CGFloat xPos = CTLineGetOffsetForStringIndex(line, range.location + range.length, NULL);
         CGPoint origin;
         CGFloat ascent, descent;
         CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+        CGFloat offset = CTLineGetOffsetForStringIndex(line, range.location + range.length, NULL);
         CTFrameGetLineOrigins(ctFrame, CFRangeMake(linesCount - 1, 0), &origin);
         // Place point after last line, including any font leading spacing if applicable.
         origin.y -= self.font.leading;
@@ -255,7 +239,7 @@ NSRange RangeIntersection(NSRange first, NSRange second)
 //        CFRelease(ctFrame);
 //        ctFrame = NULL;
 
-        return CGRectMake(origin.x - fabs(descent), xPos, ascent + descent, 2);
+        return CGRectMake(origin.x - fabs(descent), offset, ascent + descent, 2);
     }
     
     // 光标在文本的任意位置
@@ -292,6 +276,10 @@ NSRange RangeIntersection(NSRange first, NSRange second)
 //MARK:- Public
 - (NSInteger)closestIndexToPoint:(CGPoint)point;
 {
+    if (_contentText == nil || _contentText.length == 0)
+    {
+        return 0;
+    }
     
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.contentText);
     

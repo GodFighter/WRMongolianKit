@@ -62,7 +62,7 @@
 }
 
 - (void)reloadData {
-    if (_text == nil || _text.length == 0 || CGSizeEqualToSize(_containerSize, CGSizeZero)) {
+    if (_text == nil || CGSizeEqualToSize(_containerSize, CGSizeZero)) {
         return;
     }
     NSMutableAttributedString *displayText = [[NSMutableAttributedString alloc] initWithAttributedString:_text];

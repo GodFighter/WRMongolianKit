@@ -20,9 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSRange markedTextRange; // Marked text range (for input method marked text).
 @property (nonatomic) NSRange selectedTextRange; // Selected text range.
 
-@property(nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) UIFont *font;
 
 @property (nonatomic, strong) WRTextLayout *textLayout;
+
+@property (nonatomic, strong) UIColor *selectedColor;
 
 - (NSInteger)closestIndexToPoint:(CGPoint)point;
 
