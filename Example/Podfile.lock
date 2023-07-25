@@ -1,0 +1,34 @@
+PODS:
+  - WRMongolianKit (0.9.4):
+    - WRMongolianKit/Aliment (= 0.9.4)
+    - WRMongolianKit/Controllers (= 0.9.4)
+    - WRMongolianKit/CoreText (= 0.9.4)
+    - WRMongolianKit/Input (= 0.9.4)
+    - WRMongolianKit/Views (= 0.9.4)
+  - WRMongolianKit/Aliment (0.9.4)
+  - WRMongolianKit/Controllers (0.9.4):
+    - WRMongolianKit/Aliment
+    - WRMongolianKit/Views
+  - WRMongolianKit/CoreText (0.9.4):
+    - WRMongolianKit/Aliment
+    - WRMongolianKit/Input
+  - WRMongolianKit/Input (0.9.4):
+    - WRMongolianKit/Aliment
+  - WRMongolianKit/Views (0.9.4):
+    - WRMongolianKit/Aliment
+    - WRMongolianKit/CoreText
+    - WRMongolianKit/Input
+
+DEPENDENCIES:
+  - WRMongolianKit (from `../`)
+
+EXTERNAL SOURCES:
+  WRMongolianKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  WRMongolianKit: 14e23563bdc3148db20e57ce8cbb8743649874d6
+
+PODFILE CHECKSUM: dca53e6c9695f3a6e39b0fd0a6831c5debbd6513
+
+COCOAPODS: 1.11.3

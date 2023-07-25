@@ -8,9 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <WRAlignment.h>
+#import "WRAlignment.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+//MARK:-enum
+typedef NS_ENUM(NSInteger,WRTextVerticalAlignment) {
+    WRTextVerticalAlignmentLeading,
+    WRTextVerticalAlignmentCenter,
+    WRTextVerticalAlignmentTrailing
+};
+
+typedef NS_ENUM(NSInteger,WRTextHorizontalAlignment) {
+    WRTextHorizontalAlignmentLeading,
+    WRTextHorizontalAlignmentCenter,
+    WRTextHorizontalAlignmentTrailing
+};
 
 //MARK:-
 @interface WRTextLayout : NSObject

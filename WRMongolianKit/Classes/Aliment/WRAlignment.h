@@ -8,17 +8,5 @@
 #ifndef WRAlignment_h
 #define WRAlignment_h
 
-//MARK:-enum
-typedef NS_ENUM(NSInteger,WRTextVerticalAlignment) {
-    WRTextVerticalAlignmentLeading,
-    WRTextVerticalAlignmentCenter,
-    WRTextVerticalAlignmentTrailing
-};
-
-typedef NS_ENUM(NSInteger,WRTextHorizontalAlignment) {
-    WRTextHorizontalAlignmentLeading,
-    WRTextHorizontalAlignmentCenter,
-    WRTextHorizontalAlignmentTrailing
-};
 
 #endif /* WRAlignment_h */

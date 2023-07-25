@@ -7,8 +7,8 @@
 //
 
 #import "WRAlertController.h"
-#import <WRVerticalLabel.h>
-#import <WRVerticalButton.h>
+#import "WRVerticalLabel.h"
+#import "WRVerticalButton.h"
 
 //MARK:-
 @interface WRAlertAction ()
@@ -265,6 +265,8 @@ static CGFloat wr_alertController_height = 300;
     }
     if (indexPath.item == self.actions.count - 1) {
         [self clipCorner:button corners: (UIRectCornerTopRight| UIRectCornerBottomRight) cornerRadius:CGSizeMake(10, 10)];
+    } else if (indexPath.item == 0 && self.message.length == 0) {
+        [self clipCorner:button corners: (UIRectCornerTopLeft| UIRectCornerBottomLeft) cornerRadius:CGSizeMake(10, 10)];
     }
     
     UIColor *normalColor = [self colorWithActionStyle:(self.footerAction != nil || (indexPath.item != self.actions.count - 1 && action.style == UIAlertActionStyleCancel)) ? UIAlertActionStyleDefault : action.style];

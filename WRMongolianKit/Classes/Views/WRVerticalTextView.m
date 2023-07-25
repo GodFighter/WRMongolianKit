@@ -13,7 +13,7 @@
 
 #import "WRVerticalContentView.h"
 
-//MARK:-  
+//MARK:-
 @interface WRVerticalTextView() <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) WRVerticalContentView *contentView;

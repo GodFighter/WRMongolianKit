@@ -263,8 +263,10 @@ IB_DESIGNABLE
     
     UIControlState state = highlighted ? UIControlStateHighlighted : UIControlStateNormal;
     UIImage *image = self.imagesDictionary[@(state)] == nil ? self.imagesDictionary[@(UIControlStateNormal)] : self.imagesDictionary[@(state)];
-    self.imageView.image = image;
-    self.imageView.alpha = highlighted ? 0.3 : 1;
+    if (!self.selected) {
+        self.imageView.image = image;
+        self.imageView.alpha = highlighted ? 0.3 : 1;
+    }
     
     [self refreshTitleLabel];
 }
@@ -303,7 +305,9 @@ IB_DESIGNABLE
     [self refreshTitleLabel];
 }
 - (void)setAttributedTitle:(nullable NSAttributedString *)title forState:(UIControlState)state {
+    [self.coverButton setTitle:title.string forState:state];
     [self.coverButton setAttributedTitle:title forState:state];
+    [self refreshTitleLabel];
     self.titleLabel.attributedText = self.coverButton.currentAttributedTitle;
 }
 
@@ -362,10 +366,10 @@ IB_DESIGNABLE
 - (WRVerticalLabel *)titleLabel {
     if (_titleLabel == nil) {
         WRVerticalLabel *titleLabel = [WRVerticalLabel new];
+        titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self insertSubview:titleLabel aboveSubview:self.backgroundImageView];
         _titleLabel = titleLabel;
         
-        _titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _titleLabel.verticalAlignment = WRTextVerticalAlignmentCenter;
         _titleLabel.horizontalAlignment = WRTextHorizontalAlignmentCenter;
         _titleLabel.backgroundColor = [UIColor clearColor];

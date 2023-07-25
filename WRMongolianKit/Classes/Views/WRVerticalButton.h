@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <WRVerticalLabel.h>
+#import "WRVerticalLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WRVerticalButton : UIControl
 
-@property (strong, nonatomic) UIFont *font;
-@property (nonatomic) NSInteger numberOfLines;
+@property (strong, nonatomic) IBInspectable UIFont *font;
+@property (nonatomic) IBInspectable NSInteger numberOfLines;
 @property (weak, nonatomic, readonly) WRVerticalLabel *titleLabel;
 /// default yes
 @property (nonatomic) BOOL isImageTop;
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable UIImage *)imageForState:(UIControlState)state;
 - (nullable UIImage *)backgroundImageForState:(UIControlState)state;
 
-- (BOOL)isEqual:(id)object;
+- (BOOL)isEqual:(nullable id)object;
 
 @end
 

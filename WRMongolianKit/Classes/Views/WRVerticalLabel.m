@@ -6,7 +6,6 @@
 //  Copyright © 2020 项辉. All rights reserved.
 //
 
-#import "WRTextLayout.h"
 #import "WRVerticalLabel.h"
 
 @interface WRVerticalLabel ()
@@ -80,7 +79,7 @@
     self.verticalAlignment = WRTextVerticalAlignmentLeading;
     self.horizontalAlignment = WRTextHorizontalAlignmentCenter;
     self.lineBreakMode = NSLineBreakByTruncatingTail;
-    self.highlightedTextColor = [UIColor blackColor];
+    self.highlightedTextColor = nil;
     self.numberOfLines = 0;
 }
 
@@ -186,6 +185,9 @@
 
 - (void)setHighlighted:(BOOL)highlighted {
     _highlighted = highlighted;
+    if (_highlightedTextColor == nil) {
+        return;;
+    }
     
     [self.layoutText addAttribute:NSForegroundColorAttributeName value:_highlighted ? _highlightedTextColor : _textColor range:NSMakeRange(0, self.layoutText.string.length)];
     self.textLayout.text = self.layoutText;

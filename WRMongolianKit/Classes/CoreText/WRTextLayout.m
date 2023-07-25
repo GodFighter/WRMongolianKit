@@ -267,9 +267,11 @@
 //                CFDictionaryRef dicRef = CTRunGetAttributes(run);
 //                UIFont *font = CFDictionaryGetValue(dicRef, NSFontAttributeName);
 
-            CATransform3D transform3d = CATransform3DMakeAffineTransform(CGAffineTransformIdentity);
-            transform3d = CATransform3DRotate(transform3d, M_PI_2 * 3, 0, 0, 1);
-            CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
+//            CATransform3D transform3d = CATransform3DMakeAffineTransform(CGAffineTransformIdentity);
+//            transform3d = CATransform3DRotate(transform3d,M_PI , 1, 0, 0);
+//            CGAffineTransform transform = CATransform3DGetAffineTransform(transform3d);
+            CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2 * 3);
+            
             CGContextSetTextMatrix(context, transform);
             CGContextSetTextPosition(context, line.position.x + horizontalOffset, self.containerSize.height + verticalOffset);
             CTRunDraw(run, context, CFRangeMake(0, 0));

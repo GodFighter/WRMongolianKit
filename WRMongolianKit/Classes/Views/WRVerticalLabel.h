@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <WRAlignment.h>
+#import "WRTextLayout.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic,copy) NSAttributedString *attributedText;  // default is nil
 
 @property (nonatomic,strong) UIFont *font; // default is nil
-@property (nonatomic,strong) UIColor *textColor; // default is black
+@property(nonatomic, strong) UIColor *textColor; // default is black
 
 @property (nullable, nonatomic,strong) UIColor *highlightedTextColor; // default is nil
 @property (nonatomic,getter=isHighlighted) BOOL highlighted;          // default is NO

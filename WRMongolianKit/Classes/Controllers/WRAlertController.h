@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)alertControllerWithTitle:(NSString *)title message:(nullable NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle;
 
-- (void)addAction:(WRAlertAction *)action;
+- (void)addAction:(UIAlertAction *)action;
 
 @end
 
