@@ -92,13 +92,18 @@
 
             self.displayLines = [WRTextLayout lineWithAttributedString:self.displayText size:self.containerSize];
         } else if (self.textLines.count > self.numberOfLines && self.numberOfLines != 0) {
-            WRTextLine *lastLine = self.displayLines[MAX(0, (self.displayLines.count > self.numberOfLines - 1) ? self.numberOfLines - 1 : self.displayLines.count - 1)];
-            NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithAttributedString:[_text attributedSubstringFromRange:NSMakeRange(0, lastLine.range.location + lastLine.range.length + 1)]];
+            NSInteger index = self.numberOfLines - 1;
+            index = index > self.displayLines.count - 1 ? 0 : index;
+            WRTextLine *lastLine = self.displayLines[MAX(0, index)];
+            
 
             NSMutableParagraphStyle *paragraphStyle =  [[NSMutableParagraphStyle alloc] init];
-            paragraphStyle.lineBreakMode = self.lineBreakMode;
-            [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:lastLine.range];
+            paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
             
+            NSInteger begin = lastLine.range.location + lastLine.range.length;
+            NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithAttributedString:_text];
+            [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(lastLine.range.location, _text.length - lastLine.range.location)];
+
             self.displayText = string;
 
             self.displayLines = [WRTextLayout lineWithAttributedString:self.displayText size:self.containerSize];
