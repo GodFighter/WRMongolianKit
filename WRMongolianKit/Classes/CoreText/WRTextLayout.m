@@ -92,7 +92,7 @@
 
             self.displayLines = [WRTextLayout lineWithAttributedString:self.displayText size:self.containerSize];
         } else if (self.textLines.count > self.numberOfLines && self.numberOfLines != 0) {
-            WRTextLine *lastLine = self.displayLines[MAX(0, self.numberOfLines - 1)];
+            WRTextLine *lastLine = self.displayLines[MAX(0, (self.displayLines.count > self.numberOfLines - 1) ? self.numberOfLines - 1 : self.displayLines.count - 1)];
             NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithAttributedString:[_text attributedSubstringFromRange:NSMakeRange(0, lastLine.range.location + lastLine.range.length + 1)]];
 
             NSMutableParagraphStyle *paragraphStyle =  [[NSMutableParagraphStyle alloc] init];
